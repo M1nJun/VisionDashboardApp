@@ -1,0 +1,44 @@
+# ---- build output ---------------------------------------------------------
+# Everything here is produced by a build and reproduced by running it again.
+agent/bin/
+agent/obj/
+server/target/
+web/node_modules/
+web/dist/
+
+# The dashboard is compiled into the server's resources by `npm run build` and
+# packaged from there into the jar, so it is generated, not source.
+server/src/main/resources/static/
+
+# The folder Package-Central.ps1 assembles to carry to the central PC (~90 MB).
+dist/
+
+# ---- local secrets and machine-specific settings --------------------------
+# Database passwords reach the scripts through the environment. Keep them here
+# if you use a dotenv loader; never in a tracked file.
+.env
+.env.*
+deploy/deploy.local.json
+
+# ---- runtime ---------------------------------------------------------------
+# The agent's saved read position and its log, written next to the executable.
+state.json
+*.log
+
+# ---- editors and operating systems -----------------------------------------
+.vs/
+.vscode/
+.idea/
+*.user
+*.swp
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# ---- process-specific, never committed ------------------------------------
+# The contracts in contracts/ are examples. The real pair - real inspection
+# stages, defect codes, line designations and addresses - lives outside this
+# repository and is pointed at when packaging:
+#     .\Package-Central.ps1 -Contracts ..\vision-contracts
+# A company mark for the factory build, picked up when present.
+web/src/components/Logo.local.tsx

@@ -1,0 +1,315 @@
+{
+  "$comment": "Physical layout. Each PC declares which vision keys it hosts, so no component needs a name-translation table. Example A's PC hosts two vision keys from one process. Only the lines this team manages are listed: 1-1/1-2 are not built yet, and 2-1/2-2 are another team's. A line that is not here has no grid column, gets no agent deployed, and has its events refused at ingest.",
+  "lines": [
+    "A-1",
+    "A-2",
+    "B-1",
+    "B-2",
+    "C-1",
+    "C-2",
+    "C-3"
+  ],
+  "pcs": [
+    {
+      "ip": "10.0.0.11",
+      "line": "A-1",
+      "hosts": [
+        "EXAMPLE_B_ANODE"
+      ]
+    },
+    {
+      "ip": "10.0.0.12",
+      "line": "A-2",
+      "hosts": [
+        "EXAMPLE_B_ANODE"
+      ]
+    },
+    {
+      "ip": "10.0.0.13",
+      "line": "B-1",
+      "hosts": [
+        "EXAMPLE_B_ANODE"
+      ]
+    },
+    {
+      "ip": "10.0.0.14",
+      "line": "B-2",
+      "hosts": [
+        "EXAMPLE_B_ANODE"
+      ]
+    },
+    {
+      "ip": "10.0.0.15",
+      "line": "C-1",
+      "hosts": [
+        "EXAMPLE_B_ANODE"
+      ]
+    },
+    {
+      "ip": "10.0.0.16",
+      "line": "C-2",
+      "hosts": [
+        "EXAMPLE_B_ANODE"
+      ]
+    },
+    {
+      "ip": "10.0.0.17",
+      "line": "C-3",
+      "hosts": [
+        "EXAMPLE_B_ANODE"
+      ]
+    },
+    {
+      "ip": "10.0.0.18",
+      "line": "A-1",
+      "hosts": [
+        "EXAMPLE_B_CATHODE"
+      ]
+    },
+    {
+      "ip": "10.0.0.19",
+      "line": "A-2",
+      "hosts": [
+        "EXAMPLE_B_CATHODE"
+      ]
+    },
+    {
+      "ip": "10.0.0.20",
+      "line": "B-1",
+      "hosts": [
+        "EXAMPLE_B_CATHODE"
+      ]
+    },
+    {
+      "ip": "10.0.0.21",
+      "line": "B-2",
+      "hosts": [
+        "EXAMPLE_B_CATHODE"
+      ]
+    },
+    {
+      "ip": "10.0.0.22",
+      "line": "C-1",
+      "hosts": [
+        "EXAMPLE_B_CATHODE"
+      ]
+    },
+    {
+      "ip": "10.0.0.23",
+      "line": "C-2",
+      "hosts": [
+        "EXAMPLE_B_CATHODE"
+      ]
+    },
+    {
+      "ip": "10.0.0.24",
+      "line": "C-3",
+      "hosts": [
+        "EXAMPLE_B_CATHODE"
+      ]
+    },
+    {
+      "ip": "10.0.0.25",
+      "line": "A-1",
+      "hosts": [
+        "EXAMPLE_A_ANODE",
+        "EXAMPLE_A_CATHODE"
+      ]
+    },
+    {
+      "ip": "10.0.0.26",
+      "line": "A-2",
+      "hosts": [
+        "EXAMPLE_A_ANODE",
+        "EXAMPLE_A_CATHODE"
+      ]
+    },
+    {
+      "ip": "10.0.0.27",
+      "line": "B-1",
+      "hosts": [
+        "EXAMPLE_A_ANODE",
+        "EXAMPLE_A_CATHODE"
+      ]
+    },
+    {
+      "ip": "10.0.0.28",
+      "line": "B-2",
+      "hosts": [
+        "EXAMPLE_A_ANODE",
+        "EXAMPLE_A_CATHODE"
+      ]
+    },
+    {
+      "ip": "10.0.0.29",
+      "line": "C-1",
+      "hosts": [
+        "EXAMPLE_A_ANODE",
+        "EXAMPLE_A_CATHODE"
+      ]
+    },
+    {
+      "ip": "10.0.0.30",
+      "line": "C-2",
+      "hosts": [
+        "EXAMPLE_A_ANODE",
+        "EXAMPLE_A_CATHODE"
+      ]
+    },
+    {
+      "ip": "10.0.0.31",
+      "line": "C-3",
+      "hosts": [
+        "EXAMPLE_A_ANODE",
+        "EXAMPLE_A_CATHODE"
+      ]
+    },
+    {
+      "ip": "10.0.0.32",
+      "line": "A-1",
+      "hosts": [
+        "EXAMPLE_C"
+      ]
+    },
+    {
+      "ip": "10.0.0.33",
+      "line": "A-2",
+      "hosts": [
+        "EXAMPLE_C"
+      ]
+    },
+    {
+      "ip": "10.0.0.34",
+      "line": "B-1",
+      "hosts": [
+        "EXAMPLE_C"
+      ]
+    },
+    {
+      "ip": "10.0.0.35",
+      "line": "B-2",
+      "hosts": [
+        "EXAMPLE_C"
+      ]
+    },
+    {
+      "ip": "10.0.0.36",
+      "line": "C-1",
+      "hosts": [
+        "EXAMPLE_C"
+      ]
+    },
+    {
+      "ip": "10.0.0.37",
+      "line": "C-2",
+      "hosts": [
+        "EXAMPLE_C"
+      ]
+    },
+    {
+      "ip": "10.0.0.38",
+      "line": "C-3",
+      "hosts": [
+        "EXAMPLE_C"
+      ]
+    },
+    {
+      "ip": "10.0.0.39",
+      "line": "A-1",
+      "hosts": [
+        "EXAMPLE_D"
+      ]
+    },
+    {
+      "ip": "10.0.0.40",
+      "line": "A-2",
+      "hosts": [
+        "EXAMPLE_D"
+      ]
+    },
+    {
+      "ip": "10.0.0.41",
+      "line": "B-1",
+      "hosts": [
+        "EXAMPLE_D"
+      ]
+    },
+    {
+      "ip": "10.0.0.42",
+      "line": "B-2",
+      "hosts": [
+        "EXAMPLE_D"
+      ]
+    },
+    {
+      "ip": "10.0.0.43",
+      "line": "C-1",
+      "hosts": [
+        "EXAMPLE_D"
+      ]
+    },
+    {
+      "ip": "10.0.0.44",
+      "line": "C-2",
+      "hosts": [
+        "EXAMPLE_D"
+      ]
+    },
+    {
+      "ip": "10.0.0.45",
+      "line": "C-3",
+      "hosts": [
+        "EXAMPLE_D"
+      ]
+    },
+    {
+      "ip": "10.0.0.46",
+      "line": "A-1",
+      "hosts": [
+        "EXAMPLE_E"
+      ]
+    },
+    {
+      "ip": "10.0.0.47",
+      "line": "A-2",
+      "hosts": [
+        "EXAMPLE_E"
+      ]
+    },
+    {
+      "ip": "10.0.0.48",
+      "line": "B-1",
+      "hosts": [
+        "EXAMPLE_E"
+      ]
+    },
+    {
+      "ip": "10.0.0.49",
+      "line": "B-2",
+      "hosts": [
+        "EXAMPLE_E"
+      ]
+    },
+    {
+      "ip": "10.0.0.50",
+      "line": "C-1",
+      "hosts": [
+        "EXAMPLE_E"
+      ]
+    },
+    {
+      "ip": "10.0.0.51",
+      "line": "C-2",
+      "hosts": [
+        "EXAMPLE_E"
+      ]
+    },
+    {
+      "ip": "10.0.0.52",
+      "line": "C-3",
+      "hosts": [
+        "EXAMPLE_E"
+      ]
+    }
+  ]
+}

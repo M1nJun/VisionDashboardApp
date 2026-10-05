@@ -1,0 +1,680 @@
+{
+  "$schemaVersion": 1,
+  "$comment": "Single source of truth for what a vision type IS. Every component reads this file: the deployer renders agent configs from it, the agent parses CSVs by it, the server colors and aggregates by it, the frontend labels by it. agent_id is always <line>_<key>.",
+  "thresholdProfiles": {
+    "example_b": {
+      "warnPct": 0.1,
+      "critPct": 0.2
+    },
+    "example_a": {
+      "warnPct": 0.02,
+      "critPct": 0.05
+    },
+    "example_c": {
+      "warnPct": 0.02,
+      "critPct": 0.05
+    },
+    "example_d": {
+      "warnPct": 0.02,
+      "critPct": 0.1
+    },
+    "example_e": {
+      "warnPct": 0.01,
+      "critPct": 0.02
+    }
+  },
+  "$fleetMetricsComment": "The headline rates on the dashboard header. Kept here rather than in the frontend so that changing which verdicts the floor is judged on is a data change. Every rate is 'verdicts per hundred cells produced': the denominator is the line output (one reference inspector per line), never the sum of all inspectors, so a cell passing three stations is still one cell.",
+  "fleetMetrics": [
+    {
+      "key": "ngRate",
+      "label": "NG Rate",
+      "sources": [
+        {
+          "visionKey": "EXAMPLE_B_ANODE",
+          "judgement": "NG"
+        },
+        {
+          "visionKey": "EXAMPLE_B_CATHODE",
+          "judgement": "NG"
+        },
+        {
+          "visionKey": "EXAMPLE_C",
+          "judgement": "NG"
+        }
+      ]
+    },
+    {
+      "key": "dlngRate",
+      "label": "Example B DLNG",
+      "sources": [
+        {
+          "visionKey": "EXAMPLE_B_ANODE",
+          "judgement": "DLNG"
+        },
+        {
+          "visionKey": "EXAMPLE_B_CATHODE",
+          "judgement": "DLNG"
+        }
+      ]
+    }
+  ],
+  "$commonComment": "The inspectors the plant is judged on. They are the ones every line runs and the ones the NG rate is quoted from, so the rank panel opens on exactly this set rather than on all seven. The remaining vision types each get their own filter chip, in grid order.",
+  "commonVisionKeys": [
+    "EXAMPLE_B_ANODE",
+    "EXAMPLE_B_CATHODE",
+    "EXAMPLE_C"
+  ],
+  "visionTypes": [
+    {
+      "key": "EXAMPLE_A_ANODE",
+      "displayName": "Example A Anode Vision",
+      "shortName": "EXA-A",
+      "gridOrder": 1,
+      "thresholdProfile": "example_a",
+      "productionRefPriority": null,
+      "judgements": {
+        "ok": "OK",
+        "defect": [
+          {
+            "code": "NG",
+            "drivesColor": true
+          }
+        ]
+      },
+      "source": {
+        "folder": "D:\\Files\\Data\\Result\\Day",
+        "filePattern": "*_ANODE(-)_{yyyyMMdd}.csv",
+        "ignoreSuffixes": [
+          "_defect.csv"
+        ],
+        "encoding": "utf-8",
+        "delimiter": ",",
+        "columns": {
+          "unitSeq": "NO",
+          "lotId": "LOT-ID",
+          "cellId": "CELL-ID",
+          "judgement": "Result",
+          "occurredAt": "Time"
+        },
+        "modelId": {
+          "from": "FILENAME",
+          "regex": "^(?<model>[^_]+)_.*\\d{8}\\.csv$"
+        },
+        "itemDiscovery": {
+          "mode": "SCAN_SUFFIX",
+          "suffix": "-OK/NG",
+          "triggerValue": "NG",
+          "valueColumnFormat": "{ITEM}"
+        },
+        "images": {
+          "selection": "ALL",
+          "sets": {
+            "MAIN": {
+              "default": {
+                "main": "Image_Path",
+                "overlay": "Overlay_Image_Path"
+              }
+            }
+          }
+        },
+        "alarmLog": {
+          "drives": [
+            "E"
+          ],
+          "folder": "VisionPC\\LOG",
+          "fileNameFormat": "yyMMdd.Status.log",
+          "marker": "[Alarm]",
+          "encoding": "utf-8"
+        }
+      }
+    },
+    {
+      "key": "EXAMPLE_B_ANODE",
+      "displayName": "Example B Anode Vision",
+      "shortName": "EXB-A",
+      "gridOrder": 2,
+      "thresholdProfile": "example_b",
+      "productionRefPriority": null,
+      "judgements": {
+        "ok": "OK",
+        "$thresholdComment": "warnPct/critPct on a judgement are reference lines for that judgement’s own trend on the detail page. The colour-driving judgement carries none: it is scored against the vision type’s thresholdProfile, so tuning a threshold in Settings moves the grid and the chart together. A judgement with neither gets no reference line.",
+        "defect": [
+          {
+            "code": "NG",
+            "drivesColor": true
+          },
+          {
+            "code": "DLNG",
+            "drivesColor": false,
+            "warnPct": 5.0
+          },
+          {
+            "code": "C-NG",
+            "drivesColor": false,
+            "warnPct": 0.5
+          }
+        ]
+      },
+      "source": {
+        "folder": "D:\\Files\\Data\\Result\\Day",
+        "filePattern": "#{line} EXAMPLE B VISION(-)_{modelToken}_{yyyyMMdd}*.csv",
+        "ignoreSuffixes": [
+          "_defect.csv"
+        ],
+        "encoding": "utf-8",
+        "delimiter": ",",
+        "columns": {
+          "unitSeq": "NO",
+          "modelId": "MODEL-ID",
+          "lotId": "LOT-ID",
+          "cellId": "CELL-ID",
+          "judgement": "JUDGE",
+          "occurredAt": "Time"
+        },
+        "modelId": {
+          "from": "COLUMN"
+        },
+        "itemDiscovery": {
+          "mode": "NAMED_COLUMN",
+          "itemNameColumn": "JUDGE-DEFECT",
+          "sides": [
+            "LOWER",
+            "UPPER"
+          ],
+          "sideColumnFormats": {
+            "NG": [
+              "{SIDE}_{ITEM}-OK/NG",
+              "{SIDE}_{ITEM}-JUDGE"
+            ],
+            "DLNG": [
+              "{SIDE}_{ITEM}-JUDGE",
+              "{SIDE}_{ITEM}-OK/NG"
+            ],
+            "C-NG": [
+              "{SIDE}_{ITEM}-JUDGE",
+              "{SIDE}_{ITEM}-OK/NG"
+            ]
+          },
+          "$comment_sideDefectValues": "BYPASS_NG counts as a defective side here, unlike SCAN_SUFFIX vision types where it does not count as a defect at all. The two answer different questions: in this mode the row's JUDGE column has already established that the unit failed, and the side columns only say which side caused it - a bypassed side check still identifies that side. In SCAN_SUFFIX mode the -OK/NG column is what decides whether there is a defect at all, and a bypassed check was deliberately overridden.",
+          "sideDefectValues": [
+            "NG",
+            "BYPASS_NG"
+          ]
+        },
+        "images": {
+          "selection": "BY_DEFECT_SIDE",
+          "variantByItem": {
+            "backlight": [
+              "ITEM_A_L1",
+              "ITEM_A_L2",
+              "ITEM_A_R1",
+              "ITEM_A_R2",
+              "ITEM_B_L",
+              "ITEM_B_R",
+              "ITEM_G",
+              "ITEM_D_L",
+              "ITEM_C_L",
+              "ITEM_C_L1",
+              "ITEM_C_L2",
+              "ITEM_C_L3",
+              "ITEM_C_L4",
+              "ITEM_C_R",
+              "ITEM_C_R1",
+              "ITEM_C_R2",
+              "ITEM_C_R3",
+              "ITEM_C_R4",
+              "ITEM_E_L",
+              "ITEM_D_R",
+              "ITEM_E_R",
+              "ITEM_F"
+            ]
+          },
+          "sets": {
+            "LOWER": {
+              "default": {
+                "main": "LOWER_IMAGE-PATH-3",
+                "overlay": "LOWER_OVERLAY-IMAGE-PATH-3"
+              },
+              "backlight": {
+                "main": "LOWER_IMAGE-PATH-1",
+                "overlay": "LOWER_OVERLAY-IMAGE-PATH-1"
+              }
+            },
+            "UPPER": {
+              "default": {
+                "main": "UPPER_IMAGE-PATH-3",
+                "overlay": "UPPER_OVERLAY-IMAGE-PATH-3"
+              },
+              "backlight": {
+                "main": "UPPER_IMAGE-PATH-1",
+                "overlay": "UPPER_OVERLAY-IMAGE-PATH-1"
+              }
+            }
+          }
+        },
+        "alarmLog": {
+          "drives": [
+            "E",
+            "F",
+            "G"
+          ],
+          "folder": "VisionPC\\LOG",
+          "fileNameFormat": "yyMMdd.Status.log",
+          "marker": "[Alarm]",
+          "encoding": "utf-8"
+        }
+      }
+    },
+    {
+      "key": "EXAMPLE_A_CATHODE",
+      "displayName": "Example A Cathode Vision",
+      "shortName": "EXA-C",
+      "gridOrder": 3,
+      "thresholdProfile": "example_a",
+      "productionRefPriority": null,
+      "judgements": {
+        "ok": "OK",
+        "defect": [
+          {
+            "code": "NG",
+            "drivesColor": true
+          }
+        ]
+      },
+      "source": {
+        "folder": "D:\\Files\\Data\\Result\\Day",
+        "filePattern": "*_CATHODE(+)_{yyyyMMdd}.csv",
+        "ignoreSuffixes": [
+          "_defect.csv"
+        ],
+        "encoding": "utf-8",
+        "delimiter": ",",
+        "columns": {
+          "unitSeq": "NO",
+          "lotId": "LOT-ID",
+          "cellId": "CELL-ID",
+          "judgement": "Result",
+          "occurredAt": "Time"
+        },
+        "modelId": {
+          "from": "FILENAME",
+          "regex": "^(?<model>[^_]+)_.*\\d{8}\\.csv$"
+        },
+        "itemDiscovery": {
+          "mode": "SCAN_SUFFIX",
+          "suffix": "-OK/NG",
+          "triggerValue": "NG",
+          "valueColumnFormat": "{ITEM}"
+        },
+        "images": {
+          "selection": "ALL",
+          "sets": {
+            "MAIN": {
+              "default": {
+                "main": "Image_Path",
+                "overlay": "Overlay_Image_Path"
+              }
+            }
+          }
+        },
+        "alarmLog": {
+          "drives": [
+            "E"
+          ],
+          "folder": "VisionPC\\LOG",
+          "fileNameFormat": "yyMMdd.Status.log",
+          "marker": "[Alarm]",
+          "encoding": "utf-8"
+        }
+      }
+    },
+    {
+      "key": "EXAMPLE_B_CATHODE",
+      "displayName": "Example B Cathode Vision",
+      "shortName": "EXB-C",
+      "gridOrder": 4,
+      "thresholdProfile": "example_b",
+      "productionRefPriority": 2,
+      "judgements": {
+        "ok": "OK",
+        "$thresholdComment": "warnPct/critPct on a judgement are reference lines for that judgement’s own trend on the detail page. The colour-driving judgement carries none: it is scored against the vision type’s thresholdProfile, so tuning a threshold in Settings moves the grid and the chart together. A judgement with neither gets no reference line.",
+        "defect": [
+          {
+            "code": "NG",
+            "drivesColor": true
+          },
+          {
+            "code": "DLNG",
+            "drivesColor": false,
+            "warnPct": 5.0
+          },
+          {
+            "code": "C-NG",
+            "drivesColor": false,
+            "warnPct": 0.5
+          }
+        ]
+      },
+      "source": {
+        "folder": "D:\\Files\\Data\\Result\\Day",
+        "filePattern": "#{line} EXAMPLE B VISION(+)_{modelToken}_{yyyyMMdd}*.csv",
+        "ignoreSuffixes": [
+          "_defect.csv"
+        ],
+        "encoding": "utf-8",
+        "delimiter": ",",
+        "columns": {
+          "unitSeq": "NO",
+          "modelId": "MODEL-ID",
+          "lotId": "LOT-ID",
+          "cellId": "CELL-ID",
+          "judgement": "JUDGE",
+          "occurredAt": "Time"
+        },
+        "modelId": {
+          "from": "COLUMN"
+        },
+        "itemDiscovery": {
+          "mode": "NAMED_COLUMN",
+          "itemNameColumn": "JUDGE-DEFECT",
+          "sides": [
+            "LOWER",
+            "UPPER"
+          ],
+          "sideColumnFormats": {
+            "NG": [
+              "{SIDE}_{ITEM}-OK/NG",
+              "{SIDE}_{ITEM}-JUDGE"
+            ],
+            "DLNG": [
+              "{SIDE}_{ITEM}-JUDGE",
+              "{SIDE}_{ITEM}-OK/NG"
+            ],
+            "C-NG": [
+              "{SIDE}_{ITEM}-JUDGE",
+              "{SIDE}_{ITEM}-OK/NG"
+            ]
+          },
+          "$comment_sideDefectValues": "BYPASS_NG counts as a defective side here, unlike SCAN_SUFFIX vision types where it does not count as a defect at all. The two answer different questions: in this mode the row's JUDGE column has already established that the unit failed, and the side columns only say which side caused it - a bypassed side check still identifies that side. In SCAN_SUFFIX mode the -OK/NG column is what decides whether there is a defect at all, and a bypassed check was deliberately overridden.",
+          "sideDefectValues": [
+            "NG",
+            "BYPASS_NG"
+          ]
+        },
+        "images": {
+          "selection": "BY_DEFECT_SIDE",
+          "variantByItem": {
+            "backlight": [
+              "ITEM_A_L1",
+              "ITEM_A_L2",
+              "ITEM_A_R1",
+              "ITEM_A_R2",
+              "ITEM_B_L",
+              "ITEM_B_R",
+              "ITEM_G",
+              "ITEM_D_L",
+              "ITEM_C_L",
+              "ITEM_C_L1",
+              "ITEM_C_L2",
+              "ITEM_C_L3",
+              "ITEM_C_L4",
+              "ITEM_C_R",
+              "ITEM_C_R1",
+              "ITEM_C_R2",
+              "ITEM_C_R3",
+              "ITEM_C_R4",
+              "ITEM_E_L",
+              "ITEM_D_R",
+              "ITEM_E_R",
+              "ITEM_F"
+            ]
+          },
+          "sets": {
+            "LOWER": {
+              "default": {
+                "main": "LOWER_IMAGE-PATH-3",
+                "overlay": "LOWER_OVERLAY-IMAGE-PATH-3"
+              },
+              "backlight": {
+                "main": "LOWER_IMAGE-PATH-1",
+                "overlay": "LOWER_OVERLAY-IMAGE-PATH-1"
+              }
+            },
+            "UPPER": {
+              "default": {
+                "main": "UPPER_IMAGE-PATH-3",
+                "overlay": "UPPER_OVERLAY-IMAGE-PATH-3"
+              },
+              "backlight": {
+                "main": "UPPER_IMAGE-PATH-1",
+                "overlay": "UPPER_OVERLAY-IMAGE-PATH-1"
+              }
+            }
+          }
+        },
+        "alarmLog": {
+          "drives": [
+            "E",
+            "F",
+            "G"
+          ],
+          "folder": "VisionPC\\LOG",
+          "fileNameFormat": "yyMMdd.Status.log",
+          "marker": "[Alarm]",
+          "encoding": "utf-8"
+        }
+      }
+    },
+    {
+      "key": "EXAMPLE_C",
+      "displayName": "Example C Vision",
+      "shortName": "EXC",
+      "gridOrder": 5,
+      "thresholdProfile": "example_c",
+      "productionRefPriority": 1,
+      "judgements": {
+        "ok": "OK",
+        "defect": [
+          {
+            "code": "NG",
+            "drivesColor": true
+          }
+        ]
+      },
+      "source": {
+        "folder": "D:\\Files\\Data\\Result\\Day",
+        "filePattern": "*_{yyyyMMdd}.csv",
+        "ignoreSuffixes": [
+          "_defect.csv"
+        ],
+        "encoding": "utf-8",
+        "delimiter": ",",
+        "columns": {
+          "unitSeq": "NO",
+          "lotId": "LOT-ID",
+          "cellId": "CELL-ID",
+          "judgement": "Result",
+          "occurredAt": "Time"
+        },
+        "modelId": {
+          "from": "FILENAME",
+          "regex": "^(?<model>.+?)_\\d{8}\\.csv$"
+        },
+        "itemDiscovery": {
+          "mode": "SCAN_SUFFIX",
+          "suffix": "-OK/NG",
+          "triggerValue": "NG",
+          "valueColumnFormat": "{ITEM}"
+        },
+        "images": {
+          "selection": "BY_ITEM_MARKER",
+          "markers": {
+            "PLUS": "(+)",
+            "MINUS": "(-)"
+          },
+          "sets": {
+            "PLUS": {
+              "default": {
+                "main": "Image_Path",
+                "overlay": "Overlay_Image_Path"
+              }
+            },
+            "MINUS": {
+              "default": {
+                "main": "Image_Path_2",
+                "overlay": "Overlay_Image_Path_2"
+              }
+            }
+          }
+        },
+        "alarmLog": {
+          "drives": [
+            "E"
+          ],
+          "folder": "VisionPC\\LOG",
+          "fileNameFormat": "yyMMdd.Status.log",
+          "marker": "[Alarm]",
+          "encoding": "utf-8"
+        }
+      }
+    },
+    {
+      "key": "EXAMPLE_D",
+      "displayName": "Example D Vision",
+      "shortName": "EXD",
+      "gridOrder": 6,
+      "thresholdProfile": "example_d",
+      "productionRefPriority": null,
+      "judgements": {
+        "ok": "OK",
+        "defect": [
+          {
+            "code": "NG",
+            "drivesColor": true
+          }
+        ]
+      },
+      "source": {
+        "folder": "D:\\Files\\Data\\Result\\Day",
+        "filePattern": "*_{yyyyMMdd}.csv",
+        "ignoreSuffixes": [
+          "_defect.csv"
+        ],
+        "encoding": "utf-8",
+        "delimiter": ",",
+        "columns": {
+          "unitSeq": "NO",
+          "lotId": "LOT-ID",
+          "cellId": "CELL-ID",
+          "judgement": "Result",
+          "occurredAt": "Time"
+        },
+        "modelId": {
+          "from": "FILENAME",
+          "regex": "^(?<model>[^_]+)_.*\\d{8}\\.csv$"
+        },
+        "itemDiscovery": {
+          "mode": "SCAN_SUFFIX",
+          "suffix": "-OK/NG",
+          "triggerValue": "NG",
+          "valueColumnFormat": "{ITEM}"
+        },
+        "images": {
+          "selection": "ALL",
+          "sets": {
+            "LEFT": {
+              "default": {
+                "main": "Image_Path",
+                "overlay": "Overlay_Image_Path"
+              }
+            },
+            "RIGHT": {
+              "default": {
+                "main": "Image_Path_2",
+                "overlay": "Overlay_Image_Path_2"
+              }
+            }
+          }
+        },
+        "alarmLog": {
+          "drives": [
+            "E"
+          ],
+          "folder": "VisionPC\\LOG",
+          "fileNameFormat": "yyMMdd.Status.log",
+          "marker": "[Alarm]",
+          "encoding": "utf-8"
+        }
+      }
+    },
+    {
+      "key": "EXAMPLE_E",
+      "displayName": "Example E Vision",
+      "shortName": "EXE",
+      "gridOrder": 7,
+      "thresholdProfile": "example_e",
+      "productionRefPriority": null,
+      "judgements": {
+        "ok": "OK",
+        "defect": [
+          {
+            "code": "NG",
+            "drivesColor": true
+          }
+        ]
+      },
+      "source": {
+        "folder": "D:\\Files\\Data\\Result\\Day",
+        "filePattern": "*_{yyyyMMdd}.csv",
+        "ignoreSuffixes": [
+          "_defect.csv"
+        ],
+        "encoding": "utf-8",
+        "delimiter": ",",
+        "columns": {
+          "unitSeq": "NO",
+          "lotId": "LOT-ID",
+          "cellId": "CELL-ID",
+          "judgement": "Result",
+          "occurredAt": "Time"
+        },
+        "modelId": {
+          "from": "FILENAME",
+          "regex": "^(?<model>[^_]+)_.*\\d{8}\\.csv$"
+        },
+        "itemDiscovery": {
+          "mode": "SCAN_SUFFIX",
+          "suffix": "-OK/NG",
+          "triggerValue": "NG",
+          "valueColumnFormat": "{ITEM}"
+        },
+        "images": {
+          "selection": "ALL",
+          "sets": {
+            "LEFT": {
+              "default": {
+                "main": "Image_Path",
+                "overlay": "Overlay_Image_Path"
+              }
+            },
+            "RIGHT": {
+              "default": {
+                "main": "Image_Path_2",
+                "overlay": "Overlay_Image_Path_2"
+              }
+            }
+          }
+        },
+        "alarmLog": {
+          "drives": [
+            "E"
+          ],
+          "folder": "VisionPC\\LOG",
+          "fileNameFormat": "yyMMdd.Status.log",
+          "marker": "[Alarm]",
+          "encoding": "utf-8"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "centralHost": "10.0.0.10",
+  "serverPort": 8080,
+  "heartbeatPort": 6002,
+  "contextPath": "/dashboard",
+  "modelToken": "MDL",
+  "pollIntervalMs": 1000,
+  "installPath": "C:\\VisionDashboardAgent",
+  "serviceName": "VisionDashboardAgent",
+  "deployAccount": "VisionDeploy"
+}

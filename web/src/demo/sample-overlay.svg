@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <!-- What the vision software draws on top of a frame: the measurement it took and the
+       box around what it rejected. Stacked over sample-main.svg by the viewer's Overlay
+       switch, so the two have to share a coordinate space. -->
+
+  <!-- inspection window -->
+  <rect x="60" y="176" width="680" height="248" fill="none"
+        stroke="#39ff88" stroke-width="2" stroke-dasharray="10 7" opacity="0.7"/>
+
+  <!-- the rejected region -->
+  <rect x="446" y="266" width="82" height="68" fill="none" stroke="#ff3b5c" stroke-width="3"/>
+  <rect x="446" y="266" width="82" height="68" fill="#ff3b5c" opacity="0.12"/>
+  <line x1="528" y1="266" x2="600" y2="214" stroke="#ff3b5c" stroke-width="2"/>
+  <text x="606" y="210" font-family="monospace" font-size="21" font-weight="bold" fill="#ff3b5c">
+    8.95
+  </text>
+
+  <!-- edge trace the measurement was taken from -->
+  <path d="M60 300 H430 l16 -6 l24 12 l22 -10 l18 8 H740"
+        fill="none" stroke="#ffd23f" stroke-width="2" opacity="0.85"/>
+
+  <!-- calipers -->
+  <g stroke="#57c8ff" stroke-width="2" opacity="0.9">
+    <line x1="120" y1="196" x2="120" y2="404"/>
+    <line x1="112" y1="196" x2="128" y2="196"/>
+    <line x1="112" y1="404" x2="128" y2="404"/>
+  </g>
+  <text x="134" y="306" font-family="monospace" font-size="18" fill="#57c8ff">208.0</text>
+
+  <text x="62" y="166" font-family="monospace" font-size="17" fill="#39ff88" opacity="0.8">
+    ROI 1
+  </text>
+</svg>

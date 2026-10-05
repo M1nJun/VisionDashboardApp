@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>VisionAgent</AssemblyName>
+    <RootNamespace>VisionAgent</RootNamespace>
+    <Version>2.0.0</Version>
+    <!-- So `dotnet publish -c Release` on its own always yields one portable exe,
+         with no publish flags to remember at deploy time. -->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The agent reads the same catalog file the server and the deployer read, rather
+         than a per-PC config rendered from it. Nothing to re-render means nothing that
+         can drift out of step with the server's idea of a vision type. -->
+    <None Include="../contracts/vision-catalog.json" Link="vision-catalog.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

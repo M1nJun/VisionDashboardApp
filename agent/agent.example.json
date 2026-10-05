@@ -1,0 +1,14 @@
+{
+  "line": "C-2",
+  "visionKeys": ["EXAMPLE_D"],
+  "modelToken": "MDL",
+  "pollIntervalMs": 1000,
+  "server": {
+    "eventsUrl": "http://10.0.0.10:8080/dashboard/api/ingest/events",
+    "heartbeatHost": "10.0.0.10",
+    "heartbeatPort": 6002,
+    "heartbeatIntervalMs": 2000,
+    "timeoutSeconds": 10
+  },
+  "dryRun": false
+}
