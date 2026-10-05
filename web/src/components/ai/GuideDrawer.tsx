@@ -225,53 +225,6 @@ export default function GuideDrawer({
               residual divides by the level that applied at that moment - the level's drift is
               taken out before the spread is read.
             </p>
-
-            <h3>What this replaced</h3>
-            <p>
-              The first version asked a textbook question: given this inspector's recent rate,
-              how unlikely is this count by chance? It used a <b>Poisson exact test</b> for
-              small expected counts, a pooled <b>two-proportion z-test</b> once the expected
-              count passed about 20, and a <b>Wilson 95% lower bound</b> as the small-sample
-              guard, raising anything under p &lt; 0.01.
-            </p>
-            <p>
-              Every piece of that was correct and the whole thing was wrong, for two reasons.
-            </p>
-            <ul className="ai-guide-list">
-              <li>
-                <b>The Poisson assumption does not hold.</b> Real equipment overdisperses -
-                measured across this plant, most inspector/judgement pairs sit at 1.0, but
-                Example B DLNG swings 2.5 to 5 times as far as chance allows. Testing against
-                chance alone called ordinary variation significant: on five days of production
-                it flagged 166 of 221 windows, 153 of them on one inspector out of 49 having a
-                single odd half hour. An alert every half hour is not an alert.
-              </li>
-              <li>
-                <b>Nobody could check it.</b> "p = 0.003, 95% lower bound 6.4%" is a sentence
-                only its author can verify. "At this volume, usually 0-26; this window, 64" is
-                the same judgement in a unit anybody on the floor can compare against the
-                screen in front of them.
-              </li>
-            </ul>
-            <p className="ai-guide-foot">
-              The statistics did not get simpler - the band is still an interval with a
-              confidence level behind it. They stopped being the reader's problem.
-            </p>
-          </section>
-
-          <section>
-            <h3>What the model does not do</h3>
-            <ul className="ai-guide-list">
-              <li>Arithmetic — every figure is computed by the server and handed over.</li>
-              <li>Causes — an alarm and a defect in the same window are placed side by side, nothing more.</li>
-              <li>Instructions — it reports what happened.</li>
-              <li>Inventing a line, an inspector or a defect type that is not in the data.</li>
-            </ul>
-            <p className="ai-guide-foot">
-              If a sentence looks wrong, open <b>the detail table</b> and check it against the
-              numbers in the same row. The prose and the figures are stored together in one
-              report.
-            </p>
           </section>
         </div>
       </aside>
